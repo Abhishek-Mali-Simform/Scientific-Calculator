@@ -78,6 +78,28 @@ function syntax10(val) {
     return false;
 }
 
+function checkLog(val,symb){
+    let secLast = val.substring(val.length - 5, val.length-2);
+    let last = val.charAt(val.length - 1);
+    console.log(secLast);
+    console.log(last);
+    if (matchValue(last, "(") && (matchValue(secLast, " ") || matchValue(secLast, symb))) {
+        return true;
+    }
+    return false;
+}
+
+function checkLn(val,symb){
+    let secLast = val.substring(val.length - 4, val.length-2);
+    let last = val.charAt(val.length - 1);
+    console.log(secLast);
+    console.log(last);
+    if (matchValue(last, "(") && (matchValue(secLast, " ") || matchValue(secLast, symb))) {
+        return true;
+    }
+    return false;
+}
+
 function changeSign(val) {
     let a = val.split(" ");
     let last = a.pop();
@@ -187,11 +209,35 @@ function evaluate(exp) {
             ops.push('%');
         }
         else if (matchValue(tokens[i], "log")) {
-            let a = parseFloat(tokens[++i]);
+            let a;
+            if(matchValue(tokens[i+1],"(")){
+                i++;
+                let tempToken = "";
+                while(tokens[i] != ")"){
+                    tempToken += tokens[i++]+" "; 
+                    console.log(tempToken);
+                }
+                a = parseFloat(evaluate(tempToken));
+                console.log(a);
+            }else{
+                a = parseFloat(tokens[++i]);
+            }
             values.push(Math.log(a) / Math.log(10));
         }
         else if (matchValue(tokens[i], "ln")) {
-            let a = parseFloat(tokens[++i]);
+            let a;
+            if(matchValue(tokens[i+1],"(")){
+                i++;
+                let tempToken = "";
+                while(tokens[i] != ")"){
+                    tempToken += tokens[i++]+" "; 
+                    console.log(tempToken);
+                }
+                a = parseFloat(evaluate(tempToken));
+                console.log(a);
+            }else{
+                a = parseFloat(tokens[++i]);
+            }
             values.push(Math.log(a));
         }
         else if (!matchValue(tokens[i].indexOf("^"), -1)) {
@@ -267,10 +313,13 @@ function calculate(btnValue) {
     let final = "";
     if (!checkClr(btnValue.value) && flagSign(check)) {
         if (checkOp(temp) || matchValue(temp, "(") || matchValue(temp, ")") || matchValue(temp, "mod") || matchValue(temp, "log") || matchValue(temp, "ln")) {
-            if (!checkabs(check)) {
+            if (!checkabs(check) && !checkLog(check,"log")  && !checkLn(check,"ln")) {
                 final = " " + temp + " ";
             } else {
                 final = temp;
+                if(checkLog(check,"log") || checkLn(check,"ln")){
+                    final += " "; 
+                }
             }
         }
         else if (check2symbol(check, "π")) {
