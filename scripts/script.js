@@ -307,8 +307,23 @@ function evaluate(exp) {
     return values.pop();
 }
 
+
+function displaySize(val){
+    let len = val.length;
+        console.log(len);
+        if(len >=16){
+            document.getElementById("display").style.fontSize="1rem";
+        }
+        else if(len >= 9){
+            document.getElementById("display").style.fontSize="1.75rem";
+        }else{
+            document.getElementById("display").style.fontSize="2.75rem";
+        }
+}
+
 function calculate(btnValue) {
     let temp = btnValue.value;
+    displaySize(document.getElementById("display").value);
     let check = document.getElementById("display").value + temp;
     let final = "";
     if (!checkClr(btnValue.value) && flagSign(check)) {
@@ -370,6 +385,7 @@ function calculate(btnValue) {
         let token = document.getElementById("display").value;
         calValue = evaluate(token);
         document.getElementById("display").value = calValue;
+        displaySize(document.getElementById("display").value);
     }
 }
 
@@ -402,12 +418,15 @@ function numKey(event) {
             document.getElementById("display").value += " "+aVal+" ";
             event.preventDefault();
         }
+        let tlen = document.getElementById("display").value;
+        displaySize(tlen);
         return true;
     } else if(ascii===13){
         let calValue = 0;
         let token = document.getElementById("display").value;
         calValue = evaluate(token);
         document.getElementById("display").value = calValue;
+        displaySize(document.getElementById("display").value);
     }
     return false;
 }
